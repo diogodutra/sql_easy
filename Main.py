@@ -9,6 +9,8 @@ except:
 
 db = SqlEasy(file_name)
 
+print('SQLite version: ', db.version())
+
 table_name = 'employee'
 db.create_table( table_name
                 , 'staff_number', 'INTEGER PRIMARY KEY'
@@ -25,3 +27,7 @@ db.add_row(table_name, 'Jane',    'Wall',        'f', '1989-03-14')
 table = db.get_rows(table_name)
 for t in table:
     print(t)
+
+print()
+row = db.get_rows(table_name, 'staff_number=2')
+print(row)
