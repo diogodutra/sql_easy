@@ -92,3 +92,8 @@ class SqlEasy(object):
             result = result[0]
             
         return result
+        
+    def count(self, table_name):
+        command = self._command_count_rows.format(table=table_name)
+        self.cursor.execute(command)
+        return self.cursor.fetchall()[0][0]
