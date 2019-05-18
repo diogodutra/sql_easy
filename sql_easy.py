@@ -10,7 +10,7 @@ class SqlEasy(object):
     _command_create_table = 'CREATE TABLE {table} ({arguments});'
     _command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values});'
     _command_query_table = 'SELECT * FROM {table}'
-    _command_query_filter = 'WHERE'
+    _command_query_filter = ' WHERE {filter}'
     _command_count_rows = 'SELECT count(*) FROM {table};'
     _command_del_rows = 'DELETE FROM {table}'
     _arg_labels = []
@@ -84,7 +84,7 @@ class SqlEasy(object):
     def get_rows(self, table_name, filter=None):
         command = self._command_query_table.format(table=table_name)
         if (filter is not None):
-            command = command + ' ' + self._command_query_filter + ' ' + filter
+            command = command + self._command_query_filter.format(filter=filter)
             
         self.cursor.execute(command)
         
@@ -104,7 +104,7 @@ class SqlEasy(object):
         #TODO: assert argument
         command = self._command_del_rows.format(table=table_name)
         if (filter is not None):
-            command = command + ' ' + self._command_query_filter + ' ' + filter
+            command = command + self._command_query_filter.format(filter=filter)
 
         print(command)
     
