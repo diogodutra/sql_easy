@@ -13,6 +13,7 @@ class SqlEasy(object):
     __command_query_filter = ' WHERE {filter}'
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
+    __command_join_tables = "SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}"
     __arg_labels = []
 
     def __init__(self, filename):
@@ -92,6 +93,7 @@ class SqlEasy(object):
         self.connection.commit()
         
     def get_table(self, table_name, columns='*', filter=None):
+        #TODO: assert table exists
         command = self.__command_query_table.format(table=table_name, columns=columns)
         command = self.__add_filter(command, filter)
             
@@ -104,6 +106,8 @@ class SqlEasy(object):
         return result
         
     def count(self, table_name, filter=None):
+        #TODO: assert table exists
+        #TODO: assert valid filter
         command = self.__command_count_rows.format(table=table_name)
         command = self.__add_filter(command, filter)
 
@@ -112,9 +116,22 @@ class SqlEasy(object):
 
     def del_rows(self, table_name, filter=None):
         #TODO: assert table exists
-        #TODO: assert argument
+        #TODO: assert valid filter
         command = self.__command_del_rows.format(table=table_name)
         command = self.__add_filter(command, filter)
     
         self.cursor.execute(command)
         self.connection.commit()
+
+    def join(self, table_left, table_right, key_left, key_right, columns='*', join_type='INNER'):
+        #TODO: assert valid arguments
+        command = self.__command_join_tables.format(table_left=table_left
+            , table_right=table_right
+            , columns=columns
+            , join_type=join_type
+            , key_left=key_left
+            , key_right=key_right
+            )
+    
+        self.cursor.execute(command)
+        return self.cursor.fetchall()
