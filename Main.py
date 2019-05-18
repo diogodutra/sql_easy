@@ -26,6 +26,6 @@ db.add_row(table_name, 'Jane',    'Wall',        'f', '1989-03-14')
 
 db.del_rows(table_name, 'fname="Frank"')
 
-table = db.get_rows(table_name)
+table = db.get(table_name, columns='fname,lname')
 for t in table:
     print(t)

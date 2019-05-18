@@ -9,7 +9,7 @@ class SqlEasy(object):
     __command_get_version = 'SELECT SQLITE_VERSION()'
     __command_create_table = 'CREATE TABLE {table} ({arguments})'
     __command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
-    __command_query_table = 'SELECT * FROM {table}'
+    __command_query_table = 'SELECT {columns} FROM {table}'
     __command_query_filter = ' WHERE {filter}'
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
@@ -27,6 +27,10 @@ class SqlEasy(object):
             command = command + self.__command_query_filter.format(filter=filter)
 
         return command
+
+    def fetch(self, command):
+        self.cursor.execute(command)
+        return self.cursor.fetchall()
 
     def version(self):
         command = self.__command_get_version
@@ -87,8 +91,8 @@ class SqlEasy(object):
         self.cursor.execute(command)
         self.connection.commit()
         
-    def get_rows(self, table_name, filter=None):
-        command = self.__command_query_table.format(table=table_name)
+    def get(self, table_name, columns='*', filter=None):
+        command = self.__command_query_table.format(table=table_name, columns=columns)
         command = self.__add_filter(command, filter)
             
         self.cursor.execute(command)
