@@ -31,5 +31,5 @@ for t in table:
     print(t)
 
 print()
-row = db.get_rows(table_name, 'staff_number=2')
+row = db.get_rows(table_name, 'fname="William"')
 print(row)
