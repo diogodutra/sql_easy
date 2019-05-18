@@ -22,6 +22,12 @@ class SqlEasy(object):
     def __del__(self):
         self.connection.close()
 
+    def __add_filter(self, command, filter):
+        if (filter is not None):
+            command = command + self.__command_query_filter.format(filter=filter)
+
+        return command
+
     def version(self):
         command = self.__command_get_version
         self.cursor.execute(command)
@@ -83,8 +89,7 @@ class SqlEasy(object):
         
     def get_rows(self, table_name, filter=None):
         command = self.__command_query_table.format(table=table_name)
-        if (filter is not None):
-            command = command + self.__command_query_filter.format(filter=filter)
+        command = self.__add_filter(command, filter)
             
         self.cursor.execute(command)
         
@@ -96,8 +101,7 @@ class SqlEasy(object):
         
     def count(self, table_name, filter=None):
         command = self.__command_count_rows.format(table=table_name)
-        if (filter is not None):
-            command = command + self.__command_query_filter.format(filter=filter)
+        command = self.__add_filter(command, filter)
 
         self.cursor.execute(command)
         return self.cursor.fetchall()[0][0]
@@ -106,8 +110,7 @@ class SqlEasy(object):
         #TODO: assert table exists
         #TODO: assert argument
         command = self.__command_del_rows.format(table=table_name)
-        if (filter is not None):
-            command = command + self.__command_query_filter.format(filter=filter)
+        command = self.__add_filter(command, filter)
     
         self.cursor.execute(command)
         self.connection.commit()
