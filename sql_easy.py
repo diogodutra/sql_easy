@@ -43,7 +43,7 @@ class SqlEasy(object):
         self.cursor = self.connection.cursor()
 
     def create_table(self, table_name, *attributes):
-        #TODO: assert table exists
+        #TODO: throw error when table already exist
         #TODO: assert pair entries of attributes
         #TODO: assert valid labels and type_sql pairs
         self.tables.append(table_name)
@@ -91,7 +91,7 @@ class SqlEasy(object):
         self.cursor.execute(command)
         self.connection.commit()
         
-    def get(self, table_name, columns='*', filter=None):
+    def get_table(self, table_name, columns='*', filter=None):
         command = self.__command_query_table.format(table=table_name, columns=columns)
         command = self.__add_filter(command, filter)
             
