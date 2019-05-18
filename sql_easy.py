@@ -6,14 +6,14 @@ class SqlEasy(object):
     tables = []
     col_labels = []
     col_types = []
-    _command_get_version = 'SELECT SQLITE_VERSION()'
-    _command_create_table = 'CREATE TABLE {table} ({arguments})'
-    _command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
-    _command_query_table = 'SELECT * FROM {table}'
-    _command_query_filter = ' WHERE {filter}'
-    _command_count_rows = 'SELECT count(*) FROM {table}'
-    _command_del_rows = 'DELETE FROM {table}'
-    _arg_labels = []
+    __command_get_version = 'SELECT SQLITE_VERSION()'
+    __command_create_table = 'CREATE TABLE {table} ({arguments})'
+    __command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
+    __command_query_table = 'SELECT * FROM {table}'
+    __command_query_filter = ' WHERE {filter}'
+    __command_count_rows = 'SELECT count(*) FROM {table}'
+    __command_del_rows = 'DELETE FROM {table}'
+    __arg_labels = []
 
     def __init__(self, filename):
         self.filename = filename
@@ -23,7 +23,7 @@ class SqlEasy(object):
         self.connection.close()
 
     def version(self):
-        command = self._command_get_version
+        command = self.__command_get_version
         self.cursor.execute(command)
         return self.cursor.fetchone()[0]
 
@@ -52,10 +52,10 @@ class SqlEasy(object):
         self.col_types.append(types_sql)
 
         arg_labels = arg_labels[:-2]
-        self._arg_labels.append(arg_labels)
+        self.__arg_labels.append(arg_labels)
 
         arguments = arguments[:-2]
-        command = self._command_create_table.format(table=table_name, arguments=arguments)
+        command = self.__command_create_table.format(table=table_name, arguments=arguments)
         self.cursor.execute(command)
         self.connection.commit()
 
@@ -75,16 +75,16 @@ class SqlEasy(object):
 
         arg_values = arg_values[:-2]
 
-        command = self._command_insert_data.format(table=table_name
-            , labels=self._arg_labels[index_table], values=arg_values)
+        command = self.__command_insert_data.format(table=table_name
+            , labels=self.__arg_labels[index_table], values=arg_values)
         
         self.cursor.execute(command)
         self.connection.commit()
         
     def get_rows(self, table_name, filter=None):
-        command = self._command_query_table.format(table=table_name)
+        command = self.__command_query_table.format(table=table_name)
         if (filter is not None):
-            command = command + self._command_query_filter.format(filter=filter)
+            command = command + self.__command_query_filter.format(filter=filter)
             
         self.cursor.execute(command)
         
@@ -95,19 +95,19 @@ class SqlEasy(object):
         return result
         
     def count(self, table_name, filter=None):
-        command = self._command_count_rows.format(table=table_name)
+        command = self.__command_count_rows.format(table=table_name)
         if (filter is not None):
-            command = command + self._command_query_filter.format(filter=filter)
-            
+            command = command + self.__command_query_filter.format(filter=filter)
+
         self.cursor.execute(command)
         return self.cursor.fetchall()[0][0]
 
     def del_rows(self, table_name, filter=None):
         #TODO: assert table exists
         #TODO: assert argument
-        command = self._command_del_rows.format(table=table_name)
+        command = self.__command_del_rows.format(table=table_name)
         if (filter is not None):
-            command = command + self._command_query_filter.format(filter=filter)
+            command = command + self.__command_query_filter.format(filter=filter)
     
         self.cursor.execute(command)
         self.connection.commit()
