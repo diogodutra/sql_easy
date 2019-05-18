@@ -12,7 +12,7 @@ class SqlEasy(object):
     _command_query_table = 'SELECT * FROM {table}'
     _command_query_filter = 'WHERE'
     _command_count_rows = 'SELECT count(*) FROM {table};'
-    _command_del_rows = 'DELETE FROM {table} WHERE {argument};'
+    _command_del_rows = 'DELETE FROM {table}'
     _arg_labels = []
 
     def __init__(self, filename):
@@ -99,10 +99,13 @@ class SqlEasy(object):
         self.cursor.execute(command)
         return self.cursor.fetchall()[0][0]
 
-    def del_rows(self, table_name, argument):
+    def del_rows(self, table_name, filter=None):
         #TODO: assert table exists
         #TODO: assert argument
-        command = self._command_del_rows.format(table=table_name, argument=argument)
+        command = self._command_del_rows.format(table=table_name)
+        if (filter is not None):
+            command = command + ' ' + self._command_query_filter + ' ' + filter
+
         print(command)
     
         self.cursor.execute(command)
