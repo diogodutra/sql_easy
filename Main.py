@@ -26,12 +26,6 @@ db.add_row(table_name, 'Jane',    'Wall',        'f', '1989-03-14')
 
 db.del_rows(table_name, 'fname="Frank"')
 
-print(db.count(table_name))
-
 table = db.get_rows(table_name)
 for t in table:
     print(t)
-
-print()
-row = db.get_rows(table_name, 'fname="William"')
-print(row)
