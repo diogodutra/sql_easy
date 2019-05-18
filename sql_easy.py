@@ -11,7 +11,7 @@ class SqlEasy(object):
     _command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values});'
     _command_query_table = 'SELECT * FROM {table}'
     _command_query_filter = 'WHERE'
-    _command_count_rows = 'SELECT count(*) FROM {table}';
+    _command_count_rows = 'SELECT count(*) FROM {table};'
     _arg_labels = []
 
     def __init__(self, filename):
