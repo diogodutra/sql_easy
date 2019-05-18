@@ -94,8 +94,11 @@ class SqlEasy(object):
             
         return result
         
-    def count(self, table_name):
+    def count(self, table_name, filter=None):
         command = self._command_count_rows.format(table=table_name)
+        if (filter is not None):
+            command = command + self._command_query_filter.format(filter=filter)
+            
         self.cursor.execute(command)
         return self.cursor.fetchall()[0][0]
 
