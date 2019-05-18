@@ -105,8 +105,6 @@ class SqlEasy(object):
         command = self._command_del_rows.format(table=table_name)
         if (filter is not None):
             command = command + self._command_query_filter.format(filter=filter)
-
-        print(command)
     
         self.cursor.execute(command)
         self.connection.commit()
