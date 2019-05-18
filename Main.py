@@ -24,6 +24,8 @@ db.add_row(table_name, 'William', 'Shakespeare', 'm', '1961-10-25')
 db.add_row(table_name, 'Frank',   'Schiller',    'm', '1955-08-17')
 db.add_row(table_name, 'Jane',    'Wall',        'f', '1989-03-14')
 
+db.del_rows(table_name, 'fname="Frank"')
+
 print(db.count(table_name))
 
 table = db.get_rows(table_name)
