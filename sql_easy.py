@@ -7,11 +7,11 @@ class SqlEasy(object):
     col_labels = []
     col_types = []
     _command_get_version = 'SELECT SQLITE_VERSION()'
-    _command_create_table = 'CREATE TABLE {table} ({arguments});'
-    _command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values});'
+    _command_create_table = 'CREATE TABLE {table} ({arguments})'
+    _command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
     _command_query_table = 'SELECT * FROM {table}'
     _command_query_filter = ' WHERE {filter}'
-    _command_count_rows = 'SELECT count(*) FROM {table};'
+    _command_count_rows = 'SELECT count(*) FROM {table}'
     _command_del_rows = 'DELETE FROM {table}'
     _arg_labels = []
 
