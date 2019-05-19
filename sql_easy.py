@@ -157,7 +157,7 @@ class SqlEasy(object):
         result = len(self.cursor.fetchall())
         return result
         
-    def count_rows(self, table_name, where=None, sort_column=None, ascending=True):
+    def count_rows(self, table_name, *, where=None, sort_column=None, ascending=True):
         command = self.__command_count_rows.format(table=table_name)
         command += self.__add_sort(sort_column, ascending)
         command += self.__add_where(where)
@@ -165,14 +165,14 @@ class SqlEasy(object):
         self.cursor.execute(command)
         return self.cursor.fetchall()[0][0]
 
-    def del_rows(self, table_name, where=None):
+    def del_rows(self, table_name, *, where=None):
         command = self.__command_del_rows.format(table=table_name)
         command += self.__add_where(where)
     
         self.cursor.execute(command)
         self.connection.commit()
 
-    def join(self, table_left, table_right, key_left, key_right
+    def join(self, table_left, table_right, key_left, key_right, *
             , columns='*', join_type='INNER', sort_column=None, ascending=True):
         command = self.__command_join_tables.format(table_left=table_left
             , table_right=table_right
