@@ -12,6 +12,7 @@ class SqlEasy(object):
     __command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
     __command_query_table = 'SELECT {columns} FROM {table}'
     __command_query_filter = ' WHERE {filter}'
+    __command_sort = ' ORDER BY {column} {order}'
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
     __command_join_tables = "SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}"
@@ -30,6 +31,16 @@ class SqlEasy(object):
             command = command + self.__command_query_filter.format(filter=filter)
 
         return command
+
+    def __add_sort(self, column, ascending):
+        result = ''
+        if (ascending): order = 'ASC'
+        else: order = 'DESC'
+        
+        if (column is not None):
+            result += self.__command_sort.format(column=column, order=order)
+
+        return result
 
     def fetch(self, command):
         self.cursor.execute(command)
@@ -86,9 +97,11 @@ class SqlEasy(object):
         self.cursor.execute(command)
         self.connection.commit()
         
-    def get_table(self, table_name, columns='*', filter=None):
+    def get_table(self, table_name, columns='*', filter=None
+                , sort_column=None, ascending=True):
         #TODO: assert table exists
         command = self.__command_query_table.format(table=table_name, columns=columns)
+        command += self.__add_sort(sort_column, ascending)
         command = self.__add_filter(command, filter)
             
         self.cursor.execute(command)
@@ -147,10 +160,11 @@ class SqlEasy(object):
         result = len(self.cursor.fetchall())
         return result
         
-    def count_rows(self, table_name, filter=None):
+    def count_rows(self, table_name, filter=None, sort_column=None, ascending=True):
         #TODO: assert table exists
         #TODO: assert valid filter
         command = self.__command_count_rows.format(table=table_name)
+        command += self.__add_sort(sort_column, ascending)
         command = self.__add_filter(command, filter)
 
         self.cursor.execute(command)
@@ -165,7 +179,8 @@ class SqlEasy(object):
         self.cursor.execute(command)
         self.connection.commit()
 
-    def join(self, table_left, table_right, key_left, key_right, columns='*', join_type='INNER'):
+    def join(self, table_left, table_right, key_left, key_right
+            , columns='*', join_type='INNER', sort_column=None, ascending=True):
         #TODO: assert valid arguments
         command = self.__command_join_tables.format(table_left=table_left
             , table_right=table_right
@@ -174,6 +189,7 @@ class SqlEasy(object):
             , key_left=key_left
             , key_right=key_right
             )
+        command += self.__add_sort(sort_column, ascending)
     
         self.cursor.execute(command)
         return self.cursor.fetchall()

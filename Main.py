@@ -35,7 +35,8 @@ db_other_connection.del_rows('Celebrities', 'fname="Frank"')
 # it is capable of accessing the modifications performed
 # by the other 2nd connection
 table = db.join('Celebrities', 'Jobs', 'job_id', 'id'
-                , columns='fname, lname, gender, profession')
+                , columns='fname, lname, gender, profession'
+                , sort_column='gender')
 
 for t in table:
     print(t)
