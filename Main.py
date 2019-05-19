@@ -6,7 +6,7 @@ is_existent = os.path.exists(file_name)
 db = SqlEasy(file_name)
 
 if (not is_existent):
-    print('Creating database named', file_name)
+    print('Populating new database named', file_name)
 
     db.create_table( 'Jobs'
                     , 'id', 'INTEGER PRIMARY KEY'
