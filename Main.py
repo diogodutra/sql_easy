@@ -5,8 +5,6 @@ file_name = 'company.db'
 is_existent = os.path.exists(file_name)
 db = SqlEasy(file_name)
 
-print('SQLite version: ', db.version())
-
 if (not is_existent):
     print('Creating database named', file_name)
 
