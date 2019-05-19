@@ -15,9 +15,9 @@ class SqlEasy(object):
     __command_sort = ' ORDER BY {column} {order}'
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
-    __command_join_tables = "SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}"
+    __command_join_tables = 'SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}'
     __command_get_table_names = 'SELECT name FROM sqlite_master WHERE type="table"'
-    __command_get_columnn_names = 'PRAGMA table_info("{table}");'
+    __command_get_columnn_names = 'PRAGMA table_info("{table}")'
 
     def __init__(self, filename):
         self.filename = filename
