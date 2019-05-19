@@ -50,7 +50,6 @@ class SqlEasy(object):
         #TODO: assert pair entries of attributes
         #TODO: assert valid labels and type_sql pairs
         arguments = ''
-        arg_labels = ''
         labels = []
         types_sql = []
         while (len(attributes)>0):
