@@ -3,7 +3,6 @@ import sqlite3
 class SqlEasy(object):
     filename = ''
     connection = cursor = None
-    __arg_labels = []
     __index_column_key = 5
     __index_column_id = 0
     __index_column_label = 1
@@ -58,11 +57,7 @@ class SqlEasy(object):
             label, type_sql, *attributes = attributes
             labels.append(label)
             types_sql.append(type_sql)
-            arg_labels = arg_labels + label + ', '
             arguments = arguments + label + ' ' + type_sql + ', '
-
-        arg_labels = arg_labels[:-2]
-        self.__arg_labels.append(arg_labels)
 
         arguments = arguments[:-2]
         command = self.__command_create_table.format(table=table_name, arguments=arguments)
@@ -74,7 +69,6 @@ class SqlEasy(object):
         #TODO: assert length of values
         arg_values = ''
         i_value = 0
-        index_table = self.table_names().index(table_name)
         i_primary_key = self.key_index(table_name)
         for i_col in range(self.count_cols(table_name)):
             is_primary_key = (i_primary_key == i_col)
@@ -86,8 +80,9 @@ class SqlEasy(object):
 
         arg_values = arg_values[:-2]
 
+        str_column_labels_with_commas = ', '.join(self.column_names(table_name))
         command = self.__command_insert_data.format(table=table_name
-            , labels=self.__arg_labels[index_table], values=arg_values)
+            , labels=str_column_labels_with_commas, values=arg_values)
         
         self.cursor.execute(command)
         self.connection.commit()
