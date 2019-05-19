@@ -3,9 +3,11 @@ import sqlite3
 class SqlEasy(object):
     filename = ''
     connection = cursor = None
+    #TODO: replace tables, col_tables, col_types by functions that read SQL
     tables = []
     col_labels = []
     col_types = []
+    __arg_labels = [] 
     __command_get_version = 'SELECT SQLITE_VERSION()'
     __command_create_table = 'CREATE TABLE {table} ({arguments})'
     __command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
@@ -14,7 +16,6 @@ class SqlEasy(object):
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
     __command_join_tables = "SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}"
-    __arg_labels = []
 
     def __init__(self, filename):
         self.filename = filename

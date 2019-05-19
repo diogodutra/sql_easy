@@ -19,7 +19,6 @@ db.add_row('Jobs', 'Politician')
 db.add_row('Jobs', 'Writer')
 db.add_row('Jobs', 'Actor/Actress')
 
-table_name = 'Celebrities'
 db.create_table( 'Celebrities'
                 , 'id', 'INTEGER PRIMARY KEY'
                 , 'fname', 'VARCHAR(20)'
