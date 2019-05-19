@@ -1,8 +1,9 @@
 import os
 from sql_easy import SqlEasy
 
-file_name = 'company.db'
+file_name = 'demo.db'
 is_existent = os.path.exists(file_name)
+
 db = SqlEasy(file_name)
 
 if (not is_existent):
@@ -16,7 +17,9 @@ if (not is_existent):
     db.add_row('Jobs', 'Writer')
     db.add_row('Jobs', 'Actor/Actress')
 
-    db.create_table( 'Celebrities'
+    db_other_connection = SqlEasy(file_name)
+
+    db_other_connection.create_table( 'Celebrities'
                     , 'id', 'INTEGER PRIMARY KEY'
                     , 'fname', 'VARCHAR(20)'
                     , 'lname', 'VARCHAR(30)'
@@ -24,11 +27,11 @@ if (not is_existent):
                     , 'birth_date', 'DATE'
                     , 'job_id', 'INT'
                     )
-    db.add_row('Celebrities', 'William', 'Shakespeare', 'm', '1961-10-25', '2')
-    db.add_row('Celebrities', 'Frank',   'Schiller',    'm', '1955-08-17', '1')
-    db.add_row('Celebrities', 'Jane',    'Wall',        'f', '1989-03-14', '3')
+    db_other_connection.add_row('Celebrities', 'William', 'Shakespeare', 'm', '1961-10-25', '2')
+    db_other_connection.add_row('Celebrities', 'Frank',   'Schiller',    'm', '1955-08-17', '1')
+    db_other_connection.add_row('Celebrities', 'Jane',    'Wall',        'f', '1989-03-14', '3')
 
-    db.del_rows('Celebrities', 'fname="Frank"')
+    db_other_connection.del_rows('Celebrities', 'fname="Frank"')
 
 table = db.join('Celebrities', 'Jobs', 'job_id', 'id'
                 , columns='fname, lname, gender, profession')
