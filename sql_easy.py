@@ -16,6 +16,7 @@ class SqlEasy(object):
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
     __command_join_tables = "SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}"
+    __command_get_table_names = 'SELECT name FROM sqlite_master WHERE type="table"'
 
     def __init__(self, filename):
         self.filename = filename
@@ -104,6 +105,12 @@ class SqlEasy(object):
         if (len(result)==1):
             result = result[0]
             
+        return result
+
+    def table_names(self):
+        command = self.__command_get_table_names
+        self.cursor.execute(command)
+        result = [x[0] for x in self.cursor.fetchall()]
         return result
         
     def count(self, table_name, filter=None):
