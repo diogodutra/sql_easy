@@ -3,7 +3,6 @@ import sqlite3
 class SqlEasy(object):
     filename = ''
     connection = cursor = None
-    #TODO: replace tables, col_tables, col_types by functions that read SQL
     __arg_labels = []
     __index_column_key = 5
     __index_column_id = 0
