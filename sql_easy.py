@@ -4,9 +4,11 @@ class SqlEasy(object):
     filename = ''
     connection = cursor = None
     #TODO: replace tables, col_tables, col_types by functions that read SQL
-    tables = []
-    col_types = []
-    __arg_labels = [] 
+    __arg_labels = []
+    __index_column_key = 5
+    __index_column_id = 0
+    __index_column_label = 1
+    __sql_key_code = 1
     __command_get_version = 'SELECT SQLITE_VERSION()'
     __command_create_table = 'CREATE TABLE {table} ({arguments})'
     __command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
@@ -49,7 +51,6 @@ class SqlEasy(object):
         #TODO: throw error when table already exist
         #TODO: assert pair entries of attributes
         #TODO: assert valid labels and type_sql pairs
-        self.tables.append(table_name)
         arguments = ''
         arg_labels = ''
         labels = []
@@ -60,8 +61,6 @@ class SqlEasy(object):
             types_sql.append(type_sql)
             arg_labels = arg_labels + label + ', '
             arguments = arguments + label + ' ' + type_sql + ', '
-
-        self.col_types.append(types_sql)
 
         arg_labels = arg_labels[:-2]
         self.__arg_labels.append(arg_labels)
@@ -76,10 +75,10 @@ class SqlEasy(object):
         #TODO: assert length of values
         arg_values = ''
         i_value = 0
-        index_table = self.tables.index(table_name)
-        print(self.col_types[index_table])
-        for i_type in self.col_types[index_table]:
-            is_primary_key = 'PRIMARY KEY' in i_type
+        index_table = self.table_names().index(table_name)
+        i_primary_key = self.key_index(table_name)
+        for i_col in range(self.count_cols(table_name)):
+            is_primary_key = (i_primary_key == i_col)
             if (is_primary_key):
                 arg_values = arg_values + 'NULL' + ', '
             else:
@@ -125,8 +124,37 @@ class SqlEasy(object):
         result = [x[2] for x in self.cursor.fetchall()]
         return result
 
+    def key_index(self, table_name):
+        command = self.__command_get_columnn_names.format(table=table_name)
+        self.cursor.execute(command)
+        result = None
+        for column_info in self.cursor.fetchall():
+            is_primary_key = (column_info[self.__index_column_key]==self.__sql_key_code)
+            if (is_primary_key):
+                result = column_info[self.__index_column_id]
+                break
+
+        return result
+
+    def key_name(self, table_name):
+        command = self.__command_get_columnn_names.format(table=table_name)
+        self.cursor.execute(command)
+        result = None
+        for column_info in self.cursor.fetchall():
+            is_primary_key = (column_info[self.__index_column_key]==self.__sql_key_code)
+            if (is_primary_key):
+                result = column_info[self.__index_column_label]
+                break
+
+        return result
+
+    def count_cols(self, table_name):
+        command = self.__command_get_columnn_names.format(table=table_name)
+        self.cursor.execute(command)
+        result = len(self.cursor.fetchall())
+        return result
         
-    def count(self, table_name, filter=None):
+    def count_rows(self, table_name, filter=None):
         #TODO: assert table exists
         #TODO: assert valid filter
         command = self.__command_count_rows.format(table=table_name)
