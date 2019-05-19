@@ -119,6 +119,12 @@ class SqlEasy(object):
         result = [x[1] for x in self.cursor.fetchall()]
         return result
 
+    def column_types(self, table_name):
+        command = self.__command_get_columnn_names.format(table=table_name)
+        self.cursor.execute(command)
+        result = [x[2] for x in self.cursor.fetchall()]
+        return result
+
         
     def count(self, table_name, filter=None):
         #TODO: assert table exists
