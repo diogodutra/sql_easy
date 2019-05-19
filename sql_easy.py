@@ -5,7 +5,6 @@ class SqlEasy(object):
     connection = cursor = None
     #TODO: replace tables, col_tables, col_types by functions that read SQL
     tables = []
-    col_labels = []
     col_types = []
     __arg_labels = [] 
     __command_get_version = 'SELECT SQLITE_VERSION()'
@@ -17,6 +16,7 @@ class SqlEasy(object):
     __command_del_rows = 'DELETE FROM {table}'
     __command_join_tables = "SELECT {columns} FROM {table_left} {join_type} JOIN {table_right} ON {table_left}.{key_left} = {table_right}.{key_right}"
     __command_get_table_names = 'SELECT name FROM sqlite_master WHERE type="table"'
+    __command_get_columnn_names = 'PRAGMA table_info("{table}");'
 
     def __init__(self, filename):
         self.filename = filename
@@ -61,7 +61,6 @@ class SqlEasy(object):
             arg_labels = arg_labels + label + ', '
             arguments = arguments + label + ' ' + type_sql + ', '
 
-        self.col_labels.append(labels)
         self.col_types.append(types_sql)
 
         arg_labels = arg_labels[:-2]
@@ -78,6 +77,7 @@ class SqlEasy(object):
         arg_values = ''
         i_value = 0
         index_table = self.tables.index(table_name)
+        print(self.col_types[index_table])
         for i_type in self.col_types[index_table]:
             is_primary_key = 'PRIMARY KEY' in i_type
             if (is_primary_key):
@@ -112,6 +112,13 @@ class SqlEasy(object):
         self.cursor.execute(command)
         result = [x[0] for x in self.cursor.fetchall()]
         return result
+
+    def column_names(self, table_name):
+        command = self.__command_get_columnn_names.format(table=table_name)
+        self.cursor.execute(command)
+        result = [x[1] for x in self.cursor.fetchall()]
+        return result
+
         
     def count(self, table_name, filter=None):
         #TODO: assert table exists
