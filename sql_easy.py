@@ -11,7 +11,7 @@ class SqlEasy(object):
     __command_create_table = 'CREATE TABLE {table} ({arguments})'
     __command_insert_data = 'INSERT INTO {table} ({labels}) VALUES ({values})'
     __command_query_table = 'SELECT {columns} FROM {table}'
-    __command_query_filter = ' WHERE {filter}'
+    __command_where = ' WHERE {filter}'
     __command_sort = ' ORDER BY {column} {order}'
     __command_count_rows = 'SELECT count(*) FROM {table}'
     __command_del_rows = 'DELETE FROM {table}'
@@ -26,10 +26,10 @@ class SqlEasy(object):
     def __del__(self):
         self.connection.close()
 
-    def __add_filter(self, filter):
+    def __add_where(self, filter):
         result = ''
         if (filter is not None):
-            result += self.__command_query_filter.format(filter=filter)
+            result += self.__command_where.format(filter=filter)
 
         return result
 
@@ -95,11 +95,11 @@ class SqlEasy(object):
         self.cursor.execute(command)
         self.connection.commit()
         
-    def get_table(self, table_name, columns='*', filter=None
+    def get_table(self, table_name, columns='*', where=None
                 , sort_column=None, ascending=True):
         command = self.__command_query_table.format(table=table_name, columns=columns)
         command += self.__add_sort(sort_column, ascending)
-        command += self.__add_filter(filter)
+        command += self.__add_where(where)
             
         self.cursor.execute(command)
         
@@ -157,17 +157,17 @@ class SqlEasy(object):
         result = len(self.cursor.fetchall())
         return result
         
-    def count_rows(self, table_name, filter=None, sort_column=None, ascending=True):
+    def count_rows(self, table_name, where=None, sort_column=None, ascending=True):
         command = self.__command_count_rows.format(table=table_name)
         command += self.__add_sort(sort_column, ascending)
-        command += self.__add_filter(filter)
+        command += self.__add_where(where)
 
         self.cursor.execute(command)
         return self.cursor.fetchall()[0][0]
 
-    def del_rows(self, table_name, filter=None):
+    def del_rows(self, table_name, where=None):
         command = self.__command_del_rows.format(table=table_name)
-        command += self.__add_filter(filter)
+        command += self.__add_where(where)
     
         self.cursor.execute(command)
         self.connection.commit()

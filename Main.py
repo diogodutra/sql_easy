@@ -29,7 +29,7 @@ db_other_connection.create_table( 'Celebrities'
 db_other_connection.add_row('Celebrities', 'William', 'Shakespeare', 'm', '1961-10-25', '2')
 db_other_connection.add_row('Celebrities', 'Frank',   'Schiller',    'm', '1955-08-17', '1')
 db_other_connection.add_row('Celebrities', 'Jane',    'Wall',        'f', '1989-03-14', '3')
-db_other_connection.del_rows('Celebrities', 'fname="Frank"')
+db_other_connection.del_rows('Celebrities', where='fname="Frank"')
 
 # Mind that now we will use the 1st connection to check if
 # it is capable of accessing the modifications performed
