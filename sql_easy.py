@@ -36,7 +36,7 @@ class SqlEasy(object):
         self.cursor.execute(command)
         return self.cursor.fetchall()
 
-    def sql_version(self):
+    def sqlite_version(self):
         command = self.__command_get_version
         self.cursor.execute(command)
         return self.cursor.fetchone()[0]
