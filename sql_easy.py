@@ -53,12 +53,10 @@ class SqlEasy(object):
         return self.cursor.fetchone()[0]
 
     def open_sql(self):
-        #TODO: throw error when filename already exist
         self.connection = sqlite3.connect(self.filename)
         self.cursor = self.connection.cursor()
 
     def create_table(self, table_name, *attributes):
-        #TODO: throw error when table already exist
         #TODO: assert pair entries of attributes
         #TODO: assert valid labels and type_sql pairs
         arguments = ''
@@ -76,7 +74,6 @@ class SqlEasy(object):
         self.connection.commit()
 
     def add_row(self, table_name, *values):
-        #TODO: assert table exists
         #TODO: assert length of values
         arg_values = ''
         i_value = 0
@@ -100,7 +97,6 @@ class SqlEasy(object):
         
     def get_table(self, table_name, columns='*', filter=None
                 , sort_column=None, ascending=True):
-        #TODO: assert table exists
         command = self.__command_query_table.format(table=table_name, columns=columns)
         command += self.__add_sort(sort_column, ascending)
         command += self.__add_filter(filter)
@@ -162,8 +158,6 @@ class SqlEasy(object):
         return result
         
     def count_rows(self, table_name, filter=None, sort_column=None, ascending=True):
-        #TODO: assert table exists
-        #TODO: assert valid filter
         command = self.__command_count_rows.format(table=table_name)
         command += self.__add_sort(sort_column, ascending)
         command += self.__add_filter(filter)
@@ -172,8 +166,6 @@ class SqlEasy(object):
         return self.cursor.fetchall()[0][0]
 
     def del_rows(self, table_name, filter=None):
-        #TODO: assert table exists
-        #TODO: assert valid filter
         command = self.__command_del_rows.format(table=table_name)
         command += self.__add_filter(filter)
     
@@ -182,7 +174,6 @@ class SqlEasy(object):
 
     def join(self, table_left, table_right, key_left, key_right
             , columns='*', join_type='INNER', sort_column=None, ascending=True):
-        #TODO: assert valid arguments
         command = self.__command_join_tables.format(table_left=table_left
             , table_right=table_right
             , columns=columns
