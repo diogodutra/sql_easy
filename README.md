@@ -4,7 +4,7 @@ SqlEasy is an interface to manipulate SQLite database from Python.
 
 If you need to write or query directly the SQL with automatic commits right after then this is for you. It is intended to be used for applications where writing and quering a shared SQL file is necessary.
 
-All instructions are operated directly in the SQL instead of Python. It means that if you issue the instruction `join` then it will actually execute the join commmand in the SQL cursor instead of using the NumPy or any other Python library. It will guarantee that any modifications in the database performed recently by other users will be considered in your instruction.
+All instructions are operated directly in the SQL instead of Python. It means that if you issue the instruction `join` then it will actually execute the join commmand in the SQL cursor instead of using the NumPy or any other Python library. This approach guarantees that any modification performed recently by other users in the same database will be considered in your instruction.
 
 ## Examples
 
@@ -32,7 +32,7 @@ db.add_row('Jobs', 'Writer')
 db.add_row('Jobs', 'Actor/Actress')
 ```
 
-Using a shared table while there is another user with active connection:
+Using a shared database while there is another user executing an active connection:
 ```
 from sql_easy import SqlEasy
 
